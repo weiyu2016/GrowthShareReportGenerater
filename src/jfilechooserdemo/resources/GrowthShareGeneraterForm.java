@@ -9,31 +9,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import javax.swing.JFileChooser;
 
-class MyCustomFilter extends javax.swing.filechooser.FileFilter {
-
-    @Override
-    public boolean accept(File file) {
-        // Allow only directories, or files with ".txt" extension
-        return file.isDirectory() || file.getAbsolutePath().endsWith(".txt");
-    }
-
-    @Override
-    public String getDescription() {
-        // This description will be displayed in the dialog,
-        // hard-coded = ugly, should be done via I18N
-        return "Text documents (*.txt)";
-    }
-}
-
 public class GrowthShareGeneraterForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form JFileChooserDemo
+     * Creates new form NewJFrame
      */
     public GrowthShareGeneraterForm() {
         initComponents();
@@ -49,44 +34,103 @@ public class GrowthShareGeneraterForm extends javax.swing.JFrame {
     private void initComponents() {
 
         fileChooser = new javax.swing.JFileChooser();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        textarea = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        sourceFileLoader = new javax.swing.JButton();
+        usFileLoader = new javax.swing.JButton();
+        caFileLoader = new javax.swing.JButton();
+        outputPath = new javax.swing.JTextField();
+        reportGenerator = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        sourceFileStatus = new javax.swing.JLabel();
+        usFileStatus = new javax.swing.JLabel();
+        caFileStatus = new javax.swing.JLabel();
+        outputPathStatus = new javax.swing.JLabel();
+        reportStatus = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        Open = new javax.swing.JMenuItem();
-        generateReport = new javax.swing.JMenuItem();
         Exit = new javax.swing.JMenuItem();
 
-        fileChooser.setFileFilter(new MyCustomFilter());
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Growth Share Generator");
 
-        textarea.setEditable(false);
-        textarea.setColumns(20);
-        textarea.setRows(5);
-        textarea.setText("Please read the following instructions about how to generate Growth Share Report!!!\n\n1. Click \"File -> Open\" to load the Growth Share source file\n\n2. Click \"File -> Open\" to load the 1TIN file\n\n3. Click \"File -> Open\" to load the 2TIN file\n\n4. If all loaded successfully, click \"File -> Generate Report\" to generate the report\n\n\n");
-        jScrollPane1.setViewportView(textarea);
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel1.setText("All files must be in text format! And NO new line at the bottom of each file!");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setText("Growth Share Source File:");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setText("US 1TIN File:");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setText("CA 2TIN File:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel5.setText("Output File Destination:");
+
+        sourceFileLoader.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        sourceFileLoader.setText("Browse...");
+        sourceFileLoader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sourceFileLoaderActionPerformed(evt);
+            }
+        });
+
+        usFileLoader.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        usFileLoader.setText("Browse...");
+        usFileLoader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usFileLoaderActionPerformed(evt);
+            }
+        });
+
+        caFileLoader.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        caFileLoader.setText("Browse...");
+        caFileLoader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                caFileLoaderActionPerformed(evt);
+            }
+        });
+
+        outputPath.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        outputPath.setText("C:\\GrowthShareReports");
+        outputPath.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                outputPathActionPerformed(evt);
+            }
+        });
+
+        reportGenerator.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        reportGenerator.setText("Generate Report");
+        reportGenerator.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportGeneratorActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel6.setText("Press Enter after typing a new path!");
+
+        sourceFileStatus.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+
+        usFileStatus.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+
+        caFileStatus.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+
+        outputPathStatus.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+
+        reportStatus.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
         jMenu1.setText("File");
+        jMenu1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
 
-        Open.setText("Open");
-        Open.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OpenActionPerformed(evt);
-            }
-        });
-        jMenu1.add(Open);
-
-        generateReport.setText("Generate Report");
-        generateReport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                generateReportActionPerformed(evt);
-            }
-        });
-        jMenu1.add(generateReport);
-
-        Exit.setText("Exit");
+        Exit.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        Exit.setText(" Exit");
         Exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ExitActionPerformed(evt);
@@ -103,133 +147,216 @@ public class GrowthShareGeneraterForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 845, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(outputPathStatus)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(reportGenerator)
+                        .addGap(35, 35, 35)
+                        .addComponent(reportStatus))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(34, 34, 34)
+                        .addComponent(outputPath, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(sourceFileLoader)
+                        .addGap(39, 39, 39)
+                        .addComponent(sourceFileStatus))
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(usFileLoader))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(caFileLoader)))
+                        .addGap(47, 47, 47)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(caFileStatus)
+                            .addComponent(usFileStatus))))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(33, 33, 33)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(sourceFileLoader)
+                    .addComponent(sourceFileStatus))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(usFileLoader)
+                    .addComponent(usFileStatus))
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(caFileLoader)
+                    .addComponent(caFileStatus))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(outputPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(outputPathStatus)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(reportGenerator)
+                    .addComponent(reportStatus))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenActionPerformed
+    private void ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_ExitActionPerformed
+
+    private void sourceFileLoaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sourceFileLoaderActionPerformed
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             try {
                 BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
                 String s;
-                String [] inputs;
+                String[] inputs;
                 BigDecimal newValue1, newValue2, newValue3;
-                if(loadTimes % 3 == 0) {
-                    candidates.clear();
-                    while ((s = br.readLine()) != null) {
-                        inputs = s.split("\t");
-                        if (candidates.containsKey(inputs[1])) {
-                            newValue1 = candidates.get(inputs[1]);
-                            newValue2 = new BigDecimal(inputs[2].replace(",", ""));
-                            newValue3 = newValue1.add(newValue2);
-                            candidates.put(inputs[1], newValue3);
-                        } else
-                            candidates.put(inputs[1], new BigDecimal(inputs[2].replace(",", "")));
+                candidates.clear();
+                while ((s = br.readLine()) != null) {
+                    inputs = s.split("\t");
+                    if (candidates.containsKey(inputs[1])) {
+                        newValue1 = candidates.get(inputs[1]);
+                        newValue2 = new BigDecimal(inputs[2].replace(",", ""));
+                        newValue3 = newValue1.add(newValue2);
+                        candidates.put(inputs[1], newValue3);
+                    } else {
+                        candidates.put(inputs[1], new BigDecimal(inputs[2].replace(",", "")));
                     }
-                    
-                    textarea.setText(initalString + "Source file was loaded!\r\n\r\n");
-                } else if(loadTimes % 3 == 1) {
-                    allUS.clear();
-                    while ((s = br.readLine()) != null) {
-                        inputs = s.split("\t");
-                        if (!allUS.containsKey(inputs[2])) {
-                            allUS.put(inputs[2], s);
-                        }
-                    }                    
-                    textarea.append("1TIN file was loaded!\r\n\r\n");                    
-                } else if(loadTimes % 3 == 2) {
-                    allCA.clear();
-                    while ((s = br.readLine()) != null) {
-                        inputs = s.split("\t");
-                        if (!allCA.containsKey(inputs[2])) {
-                            allCA.put(inputs[2], s);
-                        }
-                    }                    
-                    textarea.append("2TIN file was loaded!\r\n\r\nNow please click \"File -> Generate Report\" to generate the report\r\n\r\n");
                 }
                 
-                loadTimes++;
-            } catch(Exception ex) {
-                textarea.append("problem accessing file " + file.getAbsolutePath() + "\r\n\r\n");
+                sourceFileStatus.setText("Source File loaded!");
+            } catch (IOException ex) {
+                sourceFileStatus.setText("problem accessing Growth Share Source File");
             }
         } else {
-            textarea.setText("File access cancelled by user. Please close the program and restart!\r\n\r\n");            
+            sourceFileStatus.setText("Loading cancelled by user.");
         }
-    }//GEN-LAST:event_OpenActionPerformed
+    }//GEN-LAST:event_sourceFileLoaderActionPerformed
 
-    private void ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_ExitActionPerformed
-
-    private void generateReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportActionPerformed
-        System.out.println("laodTimes is: " + loadTimes);
-        if(loadTimes / 3 != 1) {
-            textarea.setText(initalString + warningString);
-            loadTimes = 0;
-        } else {
-            int index;
-            String tmp, keyNoDash;
-            OutputStream out, out2, out3;
+    private void usFileLoaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usFileLoaderActionPerformed
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
             try {
-                File dir = new File(outputFolder);
-                if(!dir.exists()) {
-                    dir.mkdir();
-                }
-                out = new FileOutputStream(new File(outputFolder + File.separator + fileName));
-                out2 = new FileOutputStream(new File(outputFolder + File.separator + fileName2));
-                out3 = new FileOutputStream(new File(outputFolder + File.separator + notFound));
-
-                for (String key : candidates.keySet()) {
-                    keyNoDash = key.replaceAll("-", "");
-                    if (allUS.containsKey(keyNoDash)) {
-//                    System.out.println("Found in US!!!");
-                        tmp = "";
-                        for (index = 0; index < 9; index++) {
-                            tmp += allUS.get(keyNoDash).split("\t")[index] + "\t";
-                        }
-//                    System.out.println(tmp + candidates.get(key) + "\tKWW Growth Share Payment");
-                        tmp += candidates.get(key) + "\tKWW Growth Share Payment\r\n";
-                        out.write(tmp.getBytes());
-                    } else if (allCA.containsKey(keyNoDash)) {
-//                    System.out.println("Found in CA!!!");
-                        tmp = "";
-                        for (index = 0; index < 10; index++) {
-                            tmp += allCA.get(keyNoDash).split("\t")[index] + "\t";
-                        }
-//                    System.out.println(tmp + candidates.get(key) + "\tKWW Growth Share Payment");
-                        tmp += candidates.get(key) + "\tKWW Growth Share Payment\r\n";
-                        out2.write(tmp.getBytes());
-                    } else {
-                        tmp = keyNoDash + "\r\n";
-                        out3.write(tmp.getBytes());
+                BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
+                String s;
+                String[] inputs;
+                allUS.clear();
+                while ((s = br.readLine()) != null) {
+                    inputs = s.split("\t");
+                    if (!allUS.containsKey(inputs[2])) {
+                        allUS.put(inputs[2], s);
                     }
                 }
-            } catch (Exception ex) {
-                textarea.append("Failed to generate report! Please close the program and try again later!");
+
+                usFileStatus.setText("US 1TIN File loaded!");
+            } catch (IOException ex) {
+                usFileStatus.setText("problem accessing US 1TIN File");
+            }
+        } else {
+            usFileStatus.setText("Loading cancelled by user.");
+        }
+    }//GEN-LAST:event_usFileLoaderActionPerformed
+
+    private void caFileLoaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caFileLoaderActionPerformed
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()));
+                String s;
+                String[] inputs;
+                allCA.clear();
+                while ((s = br.readLine()) != null) {
+                    inputs = s.split("\t");
+                    if (!allCA.containsKey(inputs[2])) {
+                        allCA.put(inputs[2], s);
+                    }
+                }
+                
+                caFileStatus.setText("CA 2TIN File loaded!");
+            } catch (IOException ex) {
+                caFileStatus.setText("problem accessing CA 2TIN File");
+            }
+        } else {
+            caFileStatus.setText("Loading cancelled by user.");
+        }
+    }//GEN-LAST:event_caFileLoaderActionPerformed
+
+    private void outputPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outputPathActionPerformed
+        outputPathStatus.setText("Output file fold changed to: " + outputPath.getText());
+    }//GEN-LAST:event_outputPathActionPerformed
+
+    private void reportGeneratorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportGeneratorActionPerformed
+        int index;
+        String tmp, keyNoDash;
+        OutputStream out, out2, out3;
+        try {
+            File dir = new File(outputPath.getText());
+            if (!dir.exists()) {
+                if(!dir.mkdirs()) {
+                    reportStatus.setText("Failed to create folder at: " + outputPath.getText());
+                }
+            }
+
+            out = new FileOutputStream(new File(outputPath.getText() + File.separator + fileName));
+            out2 = new FileOutputStream(new File(outputPath.getText() + File.separator + fileName2));
+            out3 = new FileOutputStream(new File(outputPath.getText() + File.separator + notFound));
+
+            for (String key : candidates.keySet()) {
+                keyNoDash = key.replaceAll("-", "");
+                if (allUS.containsKey(keyNoDash)) {
+                    tmp = "";
+                    for (index = 0; index < 9; index++) {
+                        tmp += allUS.get(keyNoDash).split("\t")[index] + "\t";
+                    }
+                    tmp += candidates.get(key) + "\tKWW Growth Share Payment\r\n";
+                    out.write(tmp.getBytes());
+                } else if (allCA.containsKey(keyNoDash)) {
+                    tmp = "";
+                    for (index = 0; index < 10; index++) {
+                        tmp += allCA.get(keyNoDash).split("\t")[index] + "\t";
+                    }
+                    tmp += candidates.get(key) + "\tKWW Growth Share Payment\r\n";
+                    out2.write(tmp.getBytes());
+                } else {
+                    tmp = keyNoDash + "\r\n";
+                    out3.write(tmp.getBytes());
+                }
             }
             
-            loadTimes = 0;
-            textarea.setText(sucessString);
-        }        
-    }//GEN-LAST:event_generateReportActionPerformed
+            reportStatus.setText("Reports generated at: " + outputPath.getText());
+        } catch (Exception ex) {
+            reportStatus.setText("Failed to generate report! Please close the program and try again later!");
+        }
+    }//GEN-LAST:event_reportGeneratorActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {        
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -264,23 +391,30 @@ public class GrowthShareGeneraterForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Exit;
-    private javax.swing.JMenuItem Open;
+    private javax.swing.JButton caFileLoader;
+    private javax.swing.JLabel caFileStatus;
     private javax.swing.JFileChooser fileChooser;
-    private javax.swing.JMenuItem generateReport;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea textarea;
+    private javax.swing.JTextField outputPath;
+    private javax.swing.JLabel outputPathStatus;
+    private javax.swing.JButton reportGenerator;
+    private javax.swing.JLabel reportStatus;
+    private javax.swing.JButton sourceFileLoader;
+    private javax.swing.JLabel sourceFileStatus;
+    private javax.swing.JButton usFileLoader;
+    private javax.swing.JLabel usFileStatus;
     // End of variables declaration//GEN-END:variables
-    private int loadTimes;
-    private final String initalString = "Please read the following instructions about how to generate Growth Share Report!!!\n\n1. Click \"File -> Open\" to load the Growth Share source file\n\n2. Click \"File -> Open\" to load the 1TIN file\n\n3. Click \"File -> Open\" to load the 2TIN file\n\n4. If all loaded successfully, click \"File -> Generate Report\" to generate the report\n\n\n";
-    private final String warningString = "All needed files must be loaded first! Please load from the beginning again!\n\n";
-    private final String sucessString = "Report was generated at C:\\GrowthShareReports. You can close the program now.\n\n";
-    private HashMap<String, BigDecimal> candidates = new HashMap<>();
-    private HashMap<String, String> allUS = new HashMap<>();
-    private HashMap<String, String> allCA = new HashMap<>();
+    private final HashMap<String, BigDecimal> candidates = new HashMap<>();
+    private final HashMap<String, String> allUS = new HashMap<>();
+    private final HashMap<String, String> allCA = new HashMap<>();
     private final String fileName = "Growth Share - US.txt";
     private final String fileName2 = "Growth Share - CA.txt";
     private final String notFound = "Not Found.txt";
-    private final String outputFolder = "C:\\GrowthShareReports\\";
 }
